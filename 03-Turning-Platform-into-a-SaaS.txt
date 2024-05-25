@@ -1,0 +1,39 @@
+1. How can we design the system in a way
+    that every Company will be able to serve games
+    on their gaming site from their domain?
+
+- There are 2 approaches:
+  a) separate deployment per each site/client
+  b) single cluster for all sites; introduce scopes
+
+`a` is hard to support, if there are a lot of sites.
+
+`b` needs to scope
+  - the users
+  - leaderboards
+  - sub-set of the games per site from the common pool of games
+
+There should be standard tutorial how to iframe the game(s) into custom site of the client.
+Or we can implement/host some standard with custom client Logo/colors on subdomain.
+
+
+2. What modification should be done to the users table at gPlatform to support this change?
+
+- users table should have siteId FK.
+- It refs. to sites table.
+
+
+3. Considering we have 1 backend cluster that serves all companies,
+    how can we validate a user login on one gaming domain in such a way
+    that it does not give access to a different gaming domain?
+    (i.e. authenticating on site A, grants access to site A only)
+
+- The token is the result of authentication process. It has siteId field in its payload.
+- Authorization scopes the access to objects/functions in terms of specific siteId only.
+
+
+Note:
+    In some cases,
+    It would be helpful to share players from another site in gameplay only,
+    if there are not enough players on the new site.
+
